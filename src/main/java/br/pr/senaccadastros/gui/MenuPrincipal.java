@@ -68,6 +68,11 @@ public class MenuPrincipal extends javax.swing.JDialog {
         jMenuEstado.add(jMenuItemEstadoInserir);
 
         jMenuItemEstadoPesquisar.setText("Pesquisar");
+        jMenuItemEstadoPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEstadoPesquisarActionPerformed(evt);
+            }
+        });
         jMenuEstado.add(jMenuItemEstadoPesquisar);
 
         jMenuCadastro.add(jMenuEstado);
@@ -75,15 +80,24 @@ public class MenuPrincipal extends javax.swing.JDialog {
         jMenuCidade.setText("Cidade");
 
         jMenuItemCidadeInserir.setText("Inserir");
+        jMenuItemCidadeInserir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCidadeInserirActionPerformed(evt);
+            }
+        });
         jMenuCidade.add(jMenuItemCidadeInserir);
 
         jMenuItemCidadePesquisar.setText("Pesquisar");
+        jMenuItemCidadePesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCidadePesquisarActionPerformed(evt);
+            }
+        });
         jMenuCidade.add(jMenuItemCidadePesquisar);
 
         jMenuCadastro.add(jMenuCidade);
 
         jMenuBar1.add(jMenuCadastro);
-        jMenuCadastro.getAccessibleContext().setAccessibleName("Cadastro");
 
         jMenuAjuda.setText("Ajuda");
 
@@ -137,7 +151,7 @@ public class MenuPrincipal extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemEstadoInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEstadoInserirActionPerformed
-        // TODO add your handling code here:
+        new CadastroEstadoInserir(null, true);
     }//GEN-LAST:event_jMenuItemEstadoInserirActionPerformed
 
     private void jMenuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSairActionPerformed
@@ -152,6 +166,18 @@ public class MenuPrincipal extends javax.swing.JDialog {
         new AjudaSobre(null, true);
         
     }//GEN-LAST:event_jMenuItemSobreActionPerformed
+
+    private void jMenuItemEstadoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEstadoPesquisarActionPerformed
+        new CadastroEstadoPesquisar(null, true);
+    }//GEN-LAST:event_jMenuItemEstadoPesquisarActionPerformed
+
+    private void jMenuItemCidadeInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCidadeInserirActionPerformed
+        new CadastroCidadeInserir(null, true);
+    }//GEN-LAST:event_jMenuItemCidadeInserirActionPerformed
+
+    private void jMenuItemCidadePesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCidadePesquisarActionPerformed
+        new CadastroCidadePesquisar(null, true);
+    }//GEN-LAST:event_jMenuItemCidadePesquisarActionPerformed
 
     /**
      * @param args the command line arguments

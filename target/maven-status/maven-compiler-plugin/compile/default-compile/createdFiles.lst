@@ -1,4 +1,5 @@
 br\pr\senaccadastros\gui\CadastroEstadoInserir$2.class
+br\pr\senaccadastros\dao\CidadeDAO.class
 br\pr\senaccadastros\gui\CadastroCidadePesquisar$2.class
 br\pr\senaccadastros\gui\CadastroCidadeInserir$3$1.class
 br\pr\senaccadastros\gui\CadastroCidadePesquisar.class
@@ -7,6 +8,8 @@ br\pr\senaccadastros\gui\MenuPrincipal$3.class
 br\pr\senaccadastros\gui\MenuPrincipal$8.class
 br\pr\senaccadastros\gui\AjudaSobre$2$1.class
 br\pr\senaccadastros\gui\MenuPrincipal$6.class
+br\pr\senaccadastros\dao\AbstractDAO.class
+br\pr\senaccadastros\dao\EstadoDAO.class
 br\pr\senaccadastros\gui\AjudaSobre$2.class
 br\pr\senaccadastros\gui\CadastroCidadeInserir$3.class
 br\pr\senaccadastros\gui\AjudaSobre.class
@@ -31,5 +34,6 @@ br\pr\senaccadastros\gui\CadastroCidadeInserir.class
 br\pr\senaccadastros\gui\MenuPrincipal$5.class
 br\pr\senaccadastros\model\Cidade.class
 br\pr\senaccadastros\gui\CadastroEstadoInserir$3.class
+br\pr\senaccadastros\hibernate\HibernateUtil.class
 br\pr\senaccadastros\gui\CadastroEstadoPesquisar$1.class
 br\pr\senaccadastros\gui\MenuPrincipal.class

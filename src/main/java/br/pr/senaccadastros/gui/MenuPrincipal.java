@@ -4,6 +4,8 @@
  */
 package br.pr.senaccadastros.gui;
 
+import br.pr.senaccadastros.hibernate.HibernateUtil;
+
 /**
  *
  * @author henrique.4105
@@ -15,6 +17,7 @@ public class MenuPrincipal extends javax.swing.JDialog {
      */
     public MenuPrincipal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        HibernateUtil.getSession();
         initComponents();
     }
 

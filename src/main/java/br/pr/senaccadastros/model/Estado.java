@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
  *
  * @author henrique.4105
  */
-@Entity(name = "snc-estado")
+@Entity(name = "snc_estado")
 public class Estado {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

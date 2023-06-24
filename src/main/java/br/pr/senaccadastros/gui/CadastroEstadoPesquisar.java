@@ -4,21 +4,77 @@
  */
 package br.pr.senaccadastros.gui;
 
+import br.pr.senaccadastros.dao.EstadoDAO;
+import br.pr.senaccadastros.model.Estado;
+import br.pr.senaccadastros.modeltable.PesquisarEstadoModelTable;
+import br.pr.senaccadastros.utils.CellRenderer;
+import br.pr.senaccadastros.utils.Constantes;
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
+
 /**
  *
  * @author henrique.4105
  */
 public class CadastroEstadoPesquisar extends javax.swing.JDialog {
-
+    
+    private Estado estadoSelecionado;
     /**
      * Creates new form CadastroEstadoPesquisar
      */
     public CadastroEstadoPesquisar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        jButtonAlterarEstadoPesquisa.setEnabled(false);
+        jButtonExcluirEstadoPesquisa.setEnabled(false);
+        jButtonSalvarEstadoPesquisa.setEnabled(false);
+        jTextFieldNomeEstado.setEnabled(false);
+        jTextFieldSiglaEstadoPesquisa.setEnabled(false);
+        
+        organizarColunasTabela();
+        carregarTabela();
+        resetPesquisa();
+        
         setVisible(true);
     }
-
+    private void organizarColunasTabela() {
+        TableColumn column = jTablePesquisa.getColumnModel().getColumn(1);
+        column.setPreferredWidth(350);
+        jTablePesquisa.setDefaultRenderer(Object.class, new CellRenderer());
+    }
+    private void resetPesquisa() {
+        jTextFieldNomeEstado.setText(null);
+        PesquisarEstadoModelTable tableModel = (PesquisarEstadoModelTable) jTablePesquisa.getModel();
+        jTablePesquisa.setPreferredSize(new Dimension(300, 64));
+        tableModel.removeAll();
+        tableModel.fireTableDataChanged();
+    }
+    public void carregarTabela() {
+        try {
+            EstadoDAO estadoDAO = new EstadoDAO();
+            List<Estado> lista = estadoDAO.buscarTodos();
+            PesquisarEstadoModelTable tableModel = (PesquisarEstadoModelTable) jTablePesquisa.getModel();
+            if (lista.isEmpty()) {
+                jTablePesquisa.setPreferredSize(new Dimension(300, 64));
+                tableModel.removeAll();
+                tableModel.fireTableDataChanged();
+            } else {
+                tableModel.setGridBusca(lista);
+                jTablePesquisa.setPreferredSize(new Dimension(300, lista.size() * 17));
+                tableModel.fireTableDataChanged();
+            }
+        } catch (Exception e) {
+        }
+    }
+    private void reset(){
+        estadoSelecionado = null;
+        jTextFieldNomeEstado.setText(null);
+        jTextFieldNomeEstadoPesquisa.setText(null);
+        jTextFieldSiglaEstadoPesquisa.setText(null);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,12 +89,17 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
         jTextFieldNomeEstadoPesquisa = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jButtonLimparEstadoPesquisa = new javax.swing.JButton();
-        jButtonPesquisarEstadoPesquisa = new javax.swing.JButton();
         jButtonFecharEstadoPesquisa = new javax.swing.JButton();
         jButtonAlterarEstadoPesquisa = new javax.swing.JButton();
         jButtonExcluirEstadoPesquisa = new javax.swing.JButton();
+        jButtonPesquisarEstadoPesquisa = new javax.swing.JButton();
+        jButtonSalvarEstadoPesquisa = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablePesquisa = new javax.swing.JTable();
+        jTextFieldNomeEstado = new javax.swing.JTextField();
+        jTextFieldSiglaEstadoPesquisa = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -50,8 +111,11 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jButtonLimparEstadoPesquisa.setText("Limpar");
-
-        jButtonPesquisarEstadoPesquisa.setText("Pesquisar");
+        jButtonLimparEstadoPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLimparEstadoPesquisaActionPerformed(evt);
+            }
+        });
 
         jButtonFecharEstadoPesquisa.setText("Fechar");
         jButtonFecharEstadoPesquisa.addActionListener(new java.awt.event.ActionListener() {
@@ -63,23 +127,39 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
         jButtonAlterarEstadoPesquisa.setText("Alterar");
 
         jButtonExcluirEstadoPesquisa.setText("Excluir");
+        jButtonExcluirEstadoPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirEstadoPesquisaActionPerformed(evt);
+            }
+        });
+
+        jButtonPesquisarEstadoPesquisa.setText("Pesquisar");
+        jButtonPesquisarEstadoPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPesquisarEstadoPesquisaActionPerformed(evt);
+            }
+        });
+
+        jButtonSalvarEstadoPesquisa.setText("Salvar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButtonPesquisarEstadoPesquisa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExcluirEstadoPesquisa))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButtonLimparEstadoPesquisa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonPesquisarEstadoPesquisa))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButtonAlterarEstadoPesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonExcluirEstadoPesquisa)))
+                        .addComponent(jButtonAlterarEstadoPesquisa)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonFecharEstadoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonSalvarEstadoPesquisa)
+                    .addComponent(jButtonFecharEstadoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
         jPanel2Layout.setVerticalGroup(
@@ -88,46 +168,53 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonLimparEstadoPesquisa)
-                    .addComponent(jButtonPesquisarEstadoPesquisa))
+                    .addComponent(jButtonAlterarEstadoPesquisa)
+                    .addComponent(jButtonSalvarEstadoPesquisa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAlterarEstadoPesquisa)
-                    .addComponent(jButtonExcluirEstadoPesquisa))
-                .addGap(22, 22, 22))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jButtonFecharEstadoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonExcluirEstadoPesquisa)
+                    .addComponent(jButtonPesquisarEstadoPesquisa)
+                    .addComponent(jButtonFecharEstadoPesquisa))
+                .addGap(8, 8, 8))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        jTablePesquisa.setModel(new br.pr.senaccadastros.modeltable.PesquisarEstadoModelTable());
+        jTablePesquisa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTablePesquisaMousePressed(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(jTablePesquisa);
+
+        jLabel2.setText("Nome:");
+
+        jLabel3.setText("Sigla: ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextFieldNomeEstadoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 11, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jTextFieldNomeEstadoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jTextFieldNomeEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(jTextFieldSiglaEstadoPesquisa))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,9 +226,17 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldNomeEstadoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldNomeEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldSiglaEstadoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(71, 71, 71))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -168,6 +263,86 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jButtonFecharEstadoPesquisaActionPerformed
 
+    private void jButtonLimparEstadoPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimparEstadoPesquisaActionPerformed
+        // TODO add your handling code here:
+        reset();
+    }//GEN-LAST:event_jButtonLimparEstadoPesquisaActionPerformed
+    private void executarPesquisa(String pesquisa) throws Exception{
+        List<Estado> lista = new ArrayList<Estado>();
+        PesquisarEstadoModelTable tableModel =
+                (PesquisarEstadoModelTable) jTablePesquisa.getModel();
+        EstadoDAO estadoDAO = new EstadoDAO();
+        if(pesquisa == null || pesquisa.equals("")){
+            lista = estadoDAO.buscarTodos();
+        }else{
+            lista = estadoDAO.buscarPorNome(pesquisa);
+        }
+        
+        if(lista.isEmpty()){
+            tableModel.removeAll();
+            tableModel.fireTableDataChanged();
+        }else{
+            tableModel.setGridBusca(lista);
+            jTablePesquisa.setPreferredSize(new Dimension(300, lista.size() * 17));
+            tableModel.fireTableDataChanged();
+            
+        }
+    }
+    
+    private void selecionarEstado(){
+        try{
+            int row = jTablePesquisa.getSelectedRow();
+            PesquisarEstadoModelTable tableModel = (PesquisarEstadoModelTable) jTablePesquisa.getModel();
+            estadoSelecionado = tableModel.getAt(row);
+        }catch(Exception e){
+            estadoSelecionado = null;
+        }
+    }
+    private void jButtonPesquisarEstadoPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisarEstadoPesquisaActionPerformed
+        // TODO add your handling code here:
+        try{
+            if(jTextFieldNomeEstadoPesquisa.getText() == null
+                    || "".equals(jTextFieldNomeEstadoPesquisa.getText())){
+                executarPesquisa("");
+                jButtonAlterarEstadoPesquisa.setEnabled(true);
+                jButtonExcluirEstadoPesquisa.setEnabled(true);
+            }else {
+                executarPesquisa(jTextFieldNomeEstadoPesquisa.getText());
+                jButtonAlterarEstadoPesquisa.setEnabled(true);
+                jButtonExcluirEstadoPesquisa.setEnabled(true);
+            }
+            
+        
+        }catch(Exception e){
+            PesquisarEstadoModelTable tableModel = (PesquisarEstadoModelTable) jTablePesquisa.getModel();
+            tableModel.removeAll();
+            tableModel.fireTableDataChanged();
+        }
+    }//GEN-LAST:event_jButtonPesquisarEstadoPesquisaActionPerformed
+
+    private void jTablePesquisaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePesquisaMousePressed
+        // TODO add your handling code here:
+        selecionarEstado();
+    }//GEN-LAST:event_jTablePesquisaMousePressed
+
+    private void jButtonExcluirEstadoPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirEstadoPesquisaActionPerformed
+        try{
+            EstadoDAO estadoDao = new EstadoDAO();
+            estadoDao.excluir(estadoSelecionado);
+            executarPesquisa("");
+            reset();
+            jButtonAlterarEstadoPesquisa.setEnabled(false);
+            jButtonExcluirEstadoPesquisa.setEnabled(false);
+            JOptionPane.showMessageDialog(this,
+                    Constantes.MSG_REGISTRO_EXCLUIDO_SUCESSO, 
+                    this.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, 
+                    Constantes.MSG_ERRO_EXCLUIR_REGISTRO + e.getMessage(),
+                    this.getTitle(), JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonExcluirEstadoPesquisaActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -216,11 +391,16 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
     private javax.swing.JButton jButtonFecharEstadoPesquisa;
     private javax.swing.JButton jButtonLimparEstadoPesquisa;
     private javax.swing.JButton jButtonPesquisarEstadoPesquisa;
+    private javax.swing.JButton jButtonSalvarEstadoPesquisa;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTablePesquisa;
+    private javax.swing.JTextField jTextFieldNomeEstado;
     private javax.swing.JTextField jTextFieldNomeEstadoPesquisa;
+    private javax.swing.JTextField jTextFieldSiglaEstadoPesquisa;
     // End of variables declaration//GEN-END:variables
 }

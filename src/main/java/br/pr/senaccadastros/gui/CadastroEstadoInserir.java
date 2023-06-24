@@ -4,6 +4,11 @@
  */
 package br.pr.senaccadastros.gui;
 
+import br.pr.senaccadastros.dao.EstadoDAO;
+import br.pr.senaccadastros.model.Estado;
+import br.pr.senaccadastros.utils.Constantes;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author henrique.4105
@@ -16,6 +21,8 @@ public class CadastroEstadoInserir extends javax.swing.JDialog {
     public CadastroEstadoInserir(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -55,6 +62,11 @@ public class CadastroEstadoInserir extends javax.swing.JDialog {
 
         jButtonSalvarEstado.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jButtonSalvarEstado.setText("Salvar");
+        jButtonSalvarEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarEstadoActionPerformed(evt);
+            }
+        });
 
         jButtonLimparEstado.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jButtonLimparEstado.setText("Limpar");
@@ -167,6 +179,39 @@ public class CadastroEstadoInserir extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jButtonFecharEstadoActionPerformed
 
+    private void jButtonSalvarEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarEstadoActionPerformed
+        try{
+            Estado estado = new Estado();
+            EstadoDAO estadoDAO = new EstadoDAO();
+            
+            if((jTextFieldNomeEstado.getText() == null || "".equals(jTextFieldNomeEstado.getText()))
+                || (jTextFieldSiglaEstado.getText() == null || "".equals(jTextFieldSiglaEstado.getText()))) {
+                JOptionPane.showMessageDialog(this, Constantes.MSG_ERRO_STRING, this.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+                jTextFieldNomeEstado.requestFocus();
+                
+            
+            }else {
+                estado.setNomeEstado(jTextFieldNomeEstado.getText());
+                estado.setSiglaEstado(jTextFieldSiglaEstado.getText());
+                estadoDAO.salvarOuAtualizar(estado);
+                JOptionPane.showMessageDialog(this, Constantes.MSG_REGISTRO_SALVO_SUCESSO,
+                        this.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+                
+                
+            }
+        
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this,
+            Constantes.MSG_ERRO_SALVAR_REGISTRO + e.getMessage(), 
+       this.getTitle(), JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        
+        
+        
+    }//GEN-LAST:event_jButtonSalvarEstadoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -220,4 +265,6 @@ public class CadastroEstadoInserir extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldNomeEstado;
     private javax.swing.JTextField jTextFieldSiglaEstado;
     // End of variables declaration//GEN-END:variables
+
+   
 }

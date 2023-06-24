@@ -8,6 +8,25 @@ package br.pr.senaccadastros.dao;
  *
  * @author henrique.4105
  */
+import java.util.*;
+import br.pr.senaccadastros.model.Estado;
+import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import br.pr.senaccadastros.model.Estado;
 public class EstadoDAO extends AbstractDAO {
-    
+     public List<Estado> buscarTodos() throws Exception {
+        Criteria criteria = getSession().createCriteria(Estado.class);
+        //criteria.addOrder(Order.asc("codigo_estado"));
+        criteria.addOrder(Order.asc("nomeEstado"));
+        return criteria.list();
+    }
+
+    public List<Estado> buscarPorNome(String nome) throws Exception {
+        Criteria criteria = getSession().createCriteria(Estado.class);
+        criteria.add(Restrictions.ilike("nomeEstado", "%" + nome + "%"));
+        criteria.addOrder(Order.asc("nomeEstado"));
+        return criteria.list();
+    }
 }

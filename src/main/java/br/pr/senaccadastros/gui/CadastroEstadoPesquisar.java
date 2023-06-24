@@ -125,6 +125,11 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
         });
 
         jButtonAlterarEstadoPesquisa.setText("Alterar");
+        jButtonAlterarEstadoPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAlterarEstadoPesquisaActionPerformed(evt);
+            }
+        });
 
         jButtonExcluirEstadoPesquisa.setText("Excluir");
         jButtonExcluirEstadoPesquisa.addActionListener(new java.awt.event.ActionListener() {
@@ -141,6 +146,11 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
         });
 
         jButtonSalvarEstadoPesquisa.setText("Salvar");
+        jButtonSalvarEstadoPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarEstadoPesquisaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -342,6 +352,52 @@ public class CadastroEstadoPesquisar extends javax.swing.JDialog {
                     this.getTitle(), JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonExcluirEstadoPesquisaActionPerformed
+
+    private void jButtonAlterarEstadoPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarEstadoPesquisaActionPerformed
+        if(estadoSelecionado != null){
+            jButtonSalvarEstadoPesquisa.setEnabled(true);
+            jButtonExcluirEstadoPesquisa.setEnabled(true);
+            jTextFieldNomeEstado.setEnabled(true);
+            jTextFieldSiglaEstadoPesquisa.setEnabled(true);
+            jTextFieldNomeEstado.setText(estadoSelecionado.getNomeEstado());
+            jTextFieldSiglaEstadoPesquisa.setText(estadoSelecionado.getSiglaEstado());
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "Nenhum Estado Selecionado", getTitle(), JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonAlterarEstadoPesquisaActionPerformed
+
+    private void jButtonSalvarEstadoPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarEstadoPesquisaActionPerformed
+        // TODO add your handling code here:
+        try {
+            jButtonAlterarEstadoPesquisa.setEnabled(false);
+            jButtonExcluirEstadoPesquisa.setEnabled(false);
+            jButtonSalvarEstadoPesquisa.setEnabled(false);
+            jTextFieldNomeEstado.setEnabled(false);
+            jTextFieldNomeEstado.setEnabled(false);
+            EstadoDAO estadoDAO = new EstadoDAO();
+            if ((jTextFieldNomeEstado.getText() == null 
+                    || "".equals(jTextFieldNomeEstado.getText()))
+                    || (jTextFieldSiglaEstadoPesquisa.getText() == null 
+                    || "".equals(jTextFieldSiglaEstadoPesquisa.getText()))) {
+                JOptionPane.showMessageDialog(this, 
+                        Constantes.MSG_ERRO_STRING, 
+                        this.getTitle(), 
+                        JOptionPane.INFORMATION_MESSAGE);
+                jTextFieldNomeEstado.requestFocus();
+            } else {
+                estadoSelecionado.setNomeEstado(jTextFieldNomeEstado.getText());
+                estadoSelecionado.setSiglaEstado(jTextFieldSiglaEstadoPesquisa.getText());
+                estadoDAO.salvarOuAtualizar(estadoSelecionado);
+                JOptionPane.showMessageDialog(this, Constantes.MSG_REGISTRO_SALVO_SUCESSO, this.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+                reset();
+                resetPesquisa();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, Constantes.MSG_ERRO_SALVAR_REGISTRO + e.getMessage(), this.getTitle(), JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_jButtonSalvarEstadoPesquisaActionPerformed
     
     /**
      * @param args the command line arguments
